@@ -1,0 +1,54 @@
+#!/usr/bin/env sh
+
+#
+# Zellij session launcher
+#
+
+command_zellij_session_list="zellij ls -sn"
+command_zoxide_list="zoxide query -l"
+command_find_list="find ~ -maxdepth 3 -type d"
+
+get_zellij_session_list() {
+	$command_zellij_session_list
+}
+
+is_zellij_session() {
+	$command_zellij_session_list | grep -E "^$1\$"
+}
+
+is_directory() {
+	test -d "$1"
+}
+
+prompt_sessions="sessions> "
+prompt_zoxide="zoxide> "
+prompt_find="find> "
+
+header=" ^s sessions ^x zoxide ^f find"
+prompt="$prompt_sessions"
+
+session_bind="ctrl-s:change-prompt($prompt_sessions)+reload($command_zellij_session_list)"
+zoxide_bind="ctrl-x:change-prompt($prompt_zoxide)+reload($command_zoxide_list)"
+find_bind="ctrl-f:change-prompt($prompt_find)+reload($command_find_list)"
+
+result=$(
+	(get_zellij_session_list) | fzf \
+		--bind "$session_bind" \
+		--bind "$zoxide_bind" \
+		--bind "$find_bind" \
+		--header "$header" \
+		--prompt "$prompt"
+)
+
+# Check if an already existing zellij session was selected.
+if is_zellij_session "$result"; then
+	# Attach to existing session.
+	zellij attach "$result"
+elif is_directory "$result"; then
+	# Create new session based on the selected directory.
+	session_name=$(basename "$result")
+	pushd "$result" >/dev/null
+	zellij attach -c "$session_name"
+else
+	exit 1
+fi

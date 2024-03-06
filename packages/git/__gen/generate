@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+source ./generator-utils.sh
+
+template_path=$(dirname "$0")
+output_path="$template_path/.."
+
+#---
+
+gitconfig_contents=$(cat "$template_path/.gitconfig.tmpl")
+if test $(which git 2>/dev/null); then
+	current_git_user_name=$(git config user.name)
+	current_git_user_email=$(git config user.email)
+else
+	current_git_user_name=""
+	current_git_user_email=""
+fi
+
+prompt git_user_name "Git user name: " "$current_git_user_name"
+prompt git_user_email "Git user email: " "$current_git_user_email"
+
+result="$gitconfig_contents"
+result="${result/@git.name@/$git_user_name}"
+result="${result/@git.email@/$git_user_email}"
+
+echo "$result" >"$output_path/.gitconfig"
