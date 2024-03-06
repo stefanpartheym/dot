@@ -2,10 +2,10 @@
 # Recipes
 #
 
-stow_ignore := "__gen$"
-stow_source := "./packages"
-stow_target := env_var("HOME")
-stow_command := "stow --ignore='" + stow_ignore + "'" + " --dir=" + stow_source + " --target=" + stow_target
+stow_target := env("HOME")
+stow_command := "stow --ignore='__gen$' --dir=./packages --target=" + stow_target
+
+all_packages := `ls -1 ./packages | tr '\n' ' '`
 
 # Show this help message
 default:
@@ -25,12 +25,12 @@ uninstall-pkg PACKAGE:
 
 # Install all packages
 install:
-  {{stow_command}} --restow *
+  {{stow_command}} --restow {{all_packages}}
 
 # Uninstall all packages
 uninstall:
-  {{stow_command}} --delete *
+  {{stow_command}} --delete {{all_packages}}
 
-# Configure package
-configure-pkg PACKAGE:
+# Generate package
+generate PACKAGE:
   ./packages/{{PACKAGE}}/__gen/generate
