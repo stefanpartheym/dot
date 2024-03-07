@@ -23,11 +23,11 @@ esac
 if [ "$generate_pkgs" == "y" ]; then
   for pkg in $pkgs; do
     pkg_path="${source_path}/${pkg}"
-    pkg_generate_path="${pkg_path}/__gen/generate"
+    pkg_generate_path="${pkg_path}/__hooks/generate"
     if test -f "$pkg_generate_path"; then
       echo "[INFO] Generating package: $pkg"
       (
-        ./packages/$pkg/__gen/generate &&
+        $pkg_generate_path &&
           echo "[INFO] ${pkg}: Done"
       ) ||
         (

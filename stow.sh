@@ -5,10 +5,10 @@ pkg="$2"
 env="$3"
 
 source_path="./packages"
-ignore_pattern='__gen$'
+ignore_pattern='__hooks$'
 
 pkg_path="${source_path}/${pkg}"
-pkg_configure_path="${pkg_path}/__gen/configure"
+pkg_configure_path="${pkg_path}/__hooks/configure"
 
 if test -f "$pkg_configure_path"; then
   # Sourcing the configuration script will set $DOT_PKG_TARGET.
