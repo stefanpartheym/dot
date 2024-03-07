@@ -10,11 +10,13 @@ set dotenv-load
 
 environment := env("DOT_ENVIRONMENT", "desktop")
 
-# Dynamically determine all available packages.
+# Set default packages, that apply to all environments.
+default_packages := "fish git neovim.minimal"
+# Set all available packages in given environment.
 all_packages := if environment == "desktop" {
-  "fish git kitty neovim.minimal scripts zellij"
+  default_packages + " zellij kitty scripts"
 } else {
-  "fish git neovim.minimal tmux"
+  default_packages + " tmux"
 }
 
 #
@@ -31,29 +33,11 @@ list:
 
 # Generate package
 generate-pkg PACKAGE:
-  if test -f "./packages/{{PACKAGE}}/__gen/generate"; then \
-    ./packages/{{PACKAGE}}/__gen/generate; \
-  else \
-    echo "[WARN] No generator found for package: {{PACKAGE}} => skipping..."; \
-  fi
+  ./generate.sh single {{PACKAGE}} {{environment}}
 
 # Generate all packages
 generate:
-  for pkg in {{all_packages}}; do \
-    if test -f "./packages/$pkg/__gen/generate"; then \
-      echo "[INFO] Generating package: $pkg"; \
-      ( \
-        ./packages/$pkg/__gen/generate && \
-        echo "[INFO] ${pkg}: Done"; \
-      ) || \
-      ( \
-        errcode=$?; \
-        echo "[ERR] ${pkg}: Generating package failed with error code: $errcode"; \
-        exit $errcode; \
-      ) || \
-      exit $?; \
-    fi \
-  done
+  ./generate.sh multi "{{all_packages}}" {{environment}}
 
 # Install package
 install-pkg PACKAGE:
