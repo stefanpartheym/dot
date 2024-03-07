@@ -4,6 +4,20 @@ Personal dotfiles repository.
 
 > Casually overengineering my dotfiles installation.
 
+## Generating dotfiles
+
+Some dotfiles are based on a template (The `.gitconfig` for instance). Thus, it is necessary to generate them. The `just install` command will automatically trigger the generation process.
+
+However, if you want to manually generate them, use the following commands:
+
+```sh
+# Generate all dotfiles packages
+just generate
+
+# Generate a certain dotfiles package
+just generate-pkg PACKAGE_NAME
+```
+
 ## Install dotfiles
 
 ```sh
@@ -22,8 +36,10 @@ just -l
 
 ## Requirements
 
-| Tool                                                 | Command | Description                                                                          |
-| ---------------------------------------------------- | ------- | ------------------------------------------------------------------------------------ |
-| [GNU stow](https://www.gnu.org/software/stow/)       | `stow`  | Create symlinks for the dotfiles in the target directory.                            |
-| [Just command runner](https://github.com/casey/just) | `just`  | Command runner to provide an easy installation interface.                            |
-| [Bash shell](https://www.gnu.org/software/bash/)     | `bash`  | Used as script interpreter for generator scripts of certain dotfiles like gitconfig. |
+The following tools are required on your system to install the dotfiles:
+
+| Tool                                                 | Command |
+| ---------------------------------------------------- | ------- |
+| [Just command runner](https://github.com/casey/just) | `just`  |
+| [GNU stow](https://www.gnu.org/software/stow/)       | `stow`  |
+| [GNU sed](https://www.gnu.org/software/sed/)         | `sed`   |
