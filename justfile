@@ -25,15 +25,22 @@ generate PACKAGE:
   if test -f "./packages/{{PACKAGE}}/__gen/generate"; then \
     ./packages/{{PACKAGE}}/__gen/generate; \
   else \
-    echo "No generator found for package: {{PACKAGE}} => skipping..."; \
+    echo "[WARN] No generator found for package: {{PACKAGE}} => skipping..."; \
   fi
 
 # Generate all packages
 generate-all:
   for generator in `find ./packages -type f -wholename "./packages/*/__gen/generate"`; do \
-    echo "# RUNNING GENERATOR: $generator"; \
-    $generator && \
-    echo "=> SUCCESS"; \
+    echo "[INFO] Running generator: $generator"; \
+    ( \
+      $generator && \
+      echo "[INFO] ${generator}: Done"; \
+    ) || \
+    ( \
+      errcode=$?; \
+      echo "[ERR] ${generator}: Generating package failed"; \
+      exit $errcode; \
+    ) \
   done
 
 # Install package

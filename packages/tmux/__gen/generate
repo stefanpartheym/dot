@@ -10,7 +10,7 @@ output_path="${template_path}/../.config/tmux"
 tmux_plugins_path="${output_path}/plugins"
 
 if test -d "${tmux_plugins_path}/tpm/.git"; then
-	echo "# Tmux plugin manager is already cloned, skipping..."
+	echo "Tmux plugin manager is already cloned, skipping..."
 else
 	mkdir -p $tmux_plugins_path &&
 		git clone https://github.com/tmux-plugins/tpm "${tmux_plugins_path}/tpm"
