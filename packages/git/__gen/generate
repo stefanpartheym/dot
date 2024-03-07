@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source ./generator-utils.sh
+source ./utils.sh
 
 template_path=$(dirname "$0")
 output_path="$template_path/.."
