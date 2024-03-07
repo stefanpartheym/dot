@@ -21,7 +21,7 @@ list:
   ls -1 ./packages
 
 # Generate package
-generate PACKAGE:
+generate-pkg PACKAGE:
   if test -f "./packages/{{PACKAGE}}/__gen/generate"; then \
     ./packages/{{PACKAGE}}/__gen/generate; \
   else \
@@ -29,7 +29,7 @@ generate PACKAGE:
   fi
 
 # Generate all packages
-generate-all:
+generate:
   for generator in `find ./packages -type f -wholename "./packages/*/__gen/generate"`; do \
     echo "[INFO] Running generator: $generator"; \
     ( \
@@ -44,17 +44,17 @@ generate-all:
   done
 
 # Install package
-install PACKAGE:
+install-pkg PACKAGE:
   {{stow_command}} --restow {{PACKAGE}}
 
 # Uninstall package
-uninstall PACKAGE:
+uninstall-pkg PACKAGE:
   {{stow_command}} --delete {{PACKAGE}}
 
 # Install all packages
-install-all: generate-all
+install: generate
   {{stow_command}} --restow {{all_packages}}
 
 # Uninstall all packages
-uninstall-all:
+uninstall:
   {{stow_command}} --delete {{all_packages}}

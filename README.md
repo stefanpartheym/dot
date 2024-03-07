@@ -8,10 +8,10 @@ Personal dotfiles repository.
 
 ```sh
 # Install all dotfiles packages
-just install-all
+just install
 
 # Install all a certain dotfiles package
-just install PACKAGE_NAME
+just install-pkg PACKAGE_NAME
 ```
 
 For more information about the available commands run:
