@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+environment="$1"
+case "$environment" in
+"desktop")
+	DOT_PKG_TARGET="$HOME/.config/nvim.minimal"
+	;;
+"server")
+	DOT_PKG_TARGET="$HOME/.config/nvim"
+	;;
+*)
+	echo "Invalid environment: $environment"
+	exit 1
+	;;
+esac

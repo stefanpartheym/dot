@@ -1,12 +1,21 @@
 #
+# Settings
+#
+
+set dotenv-load
+
+#
 # Variables
 #
 
-stow_target := env("HOME")
-stow_command := "stow --ignore='__gen$' --dir=./packages --target=" + stow_target
+environment := env("DOT_ENVIRONMENT", "desktop")
 
 # Dynamically determine all available packages.
-all_packages := trim(`ls -1 ./packages | tr '\n' ' '`)
+all_packages := if environment == "desktop" {
+  "fish git kitty neovim.minimal scripts zellij"
+} else {
+  "fish git neovim.minimal tmux"
+}
 
 #
 # Recipes
@@ -30,31 +39,34 @@ generate-pkg PACKAGE:
 
 # Generate all packages
 generate:
-  for generator in `find ./packages -type f -wholename "./packages/*/__gen/generate"`; do \
-    echo "[INFO] Running generator: $generator"; \
-    ( \
-      $generator && \
-      echo "[INFO] ${generator}: Done"; \
-    ) || \
-    ( \
-      errcode=$?; \
-      echo "[ERR] ${generator}: Generating package failed"; \
-      exit $errcode; \
-    ) \
+  for pkg in {{all_packages}}; do \
+    if test -f "./packages/$pkg/__gen/generate"; then \
+      echo "[INFO] Generating package: $pkg"; \
+      ( \
+        ./packages/$pkg/__gen/generate && \
+        echo "[INFO] ${pkg}: Done"; \
+      ) || \
+      ( \
+        errcode=$?; \
+        echo "[ERR] ${pkg}: Generating package failed with error code: $errcode"; \
+        exit $errcode; \
+      ) || \
+      exit $?; \
+    fi \
   done
 
 # Install package
 install-pkg PACKAGE:
-  {{stow_command}} --restow {{PACKAGE}}
+  ./stow.sh restow {{PACKAGE}} {{environment}}
 
 # Uninstall package
 uninstall-pkg PACKAGE:
-  {{stow_command}} --delete {{PACKAGE}}
+  ./stow.sh delete {{PACKAGE}} {{environment}}
 
 # Install all packages
 install: generate
-  {{stow_command}} --restow {{all_packages}}
+  for pkg in {{all_packages}}; do just install-pkg $pkg; done
 
 # Uninstall all packages
 uninstall:
-  {{stow_command}} --delete {{all_packages}}
+  for pkg in {{all_packages}}; do just uninstall-pkg $pkg; done
