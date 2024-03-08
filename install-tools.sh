@@ -1,10 +1,13 @@
 #!/usr/bin/env sh
 
 #
-# Installer for additional tools (fish, nvim, ...).
+# Installer for additional tools (nvim, zellij, tmux, ...).
 #
 
 source ./utils.sh
+
+test -f ./.env && source ./.env
+test -z "$DOT_ENVIRONMENT" && DOT_ENVIRONMENT="desktop"
 
 #-------------------------------------------------------------------------------
 
@@ -52,9 +55,16 @@ info "Installing delta (git diff pager)"
 $PKG_INSTALL git-delta
 result
 
-info "Installing tmux"
-$PKG_INSTALL tmux
-result
+# In server environments install tmux, in desktop environments install zellij.
+if [ "$DOT_ENVIRONMENT" == "server" ]; then
+  info "Installing tmux"
+  $PKG_INSTALL tmux
+  result
+else
+  info "Installing zellij"
+  $PKG_INSTALL zellij
+  result
+fi
 
 info "Installing yazi and dependencies (cli file manager)"
 $PKG_INSTALL yazi unarchiver ffmpegthumbnailer poppler

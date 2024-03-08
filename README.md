@@ -34,6 +34,16 @@ For more information about the available commands run:
 just -l
 ```
 
+## Install default shell and additional CLI tools
+
+```sh
+# Install default shell (fish)
+./install-shell.sh
+
+# Install additional CLI tools (nvim, tmux, zellij, etc.)
+./install-tools.sh
+```
+
 ## Requirements
 
 The following tools are required on your system to install the dotfiles:
