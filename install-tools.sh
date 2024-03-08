@@ -1,0 +1,65 @@
+#!/usr/bin/env sh
+
+#
+# Installer for additional tools (fish, nvim, ...).
+#
+
+source ./utils.sh
+
+#-------------------------------------------------------------------------------
+
+# Specific for linux systems:
+# Install xclip clipboard tool
+if test $PLATFORM_LINUX -eq 1; then
+  info "Installing xclip (clipboard tool)"
+  $PKG_INSTALL xclip
+  result
+fi
+
+info "Installing stow (symlink farm manager)"
+$PKG_INSTALL stow
+result
+
+info "Installing fzf (fuzzy finder)"
+$PKG_INSTALL fzf
+result
+
+info "Installing zoxide (replacement for cd)"
+$PKG_INSTALL zoxide
+result
+
+info "Installing eza (replacement for ls)"
+$PKG_INSTALL eza
+result
+
+info "Installing bat (replacement for cat)"
+$PKG_INSTALL bat
+result
+
+info "Installing fd (replacement for locate)"
+$PKG_INSTALL fd
+result
+
+info "Installing ripgrep (replacement for grep)"
+$PKG_INSTALL ripgrep
+result
+
+info "Installing jq (Command-line JSON processor)"
+$PKG_INSTALL jq
+result
+
+info "Installing delta (git diff pager)"
+$PKG_INSTALL git-delta
+result
+
+info "Installing tmux"
+$PKG_INSTALL tmux
+result
+
+info "Installing yazi and dependencies (cli file manager)"
+$PKG_INSTALL yazi unarchiver ffmpegthumbnailer poppler
+result
+
+info "Installing neovim (replacement for vim)"
+$PKG_INSTALL neovim
+result

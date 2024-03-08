@@ -8,7 +8,7 @@ output_path="$template_path/.."
 #---
 
 gitconfig_contents=$(cat "$template_path/.gitconfig.tmpl")
-if type git >/dev/null; then
+if command_exists "git"; then
   current_git_user_name=$(git config user.name)
   current_git_user_email=$(git config user.email)
 else

@@ -25,19 +25,18 @@ if [ "$generate_pkgs" == "y" ]; then
     pkg_path="${source_path}/${pkg}"
     pkg_generate_path="${pkg_path}/__hooks/generate"
     if test -f "$pkg_generate_path"; then
-      echo "[INFO] Generating package: $pkg"
+      info "Generating package: $pkg"
       (
         $pkg_generate_path &&
-          echo "[INFO] ${pkg}: Done"
+          info "${pkg}: Done"
       ) ||
         (
           errcode=$?
-          echo "[ERR] ${pkg}: Generating package failed with error code: $errcode"
-          exit $errcode
+          error "${pkg}: Generating package failed with error code: $errcode" $errcode
         ) ||
         exit $?
     elif [ "$mode" == "single" ]; then
-      echo "[WARN] No generator found for package: ${pkg} => skipping..."
+      warn "No generator found for package: ${pkg} => skipping..."
     fi
   done
 fi
