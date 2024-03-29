@@ -1,13 +1,16 @@
 layout {
-    // layout
-    pane size=1 borderless=true {
-        plugin location="zellij:compact-bar"
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:compact-bar"
+        }
+        children
     }
-    pane split_direction="vertical" {
-        pane {
-            size "75%"
-            focus true
+
+    tab split_direction="vertical" {
+        pane split_direction="horizontal" {
             command "nvim"
+            focus true
+            size "75%"
             start_suspended true
         }
         pane split_direction="horizontal" {
@@ -20,13 +23,5 @@ layout {
             }
             pane size="25%"
         }
-    }
-
-    // template
-    new_tab_template {
-      pane size=1 borderless=true {
-          plugin location="zellij:compact-bar"
-      }
-      pane
     }
 }
