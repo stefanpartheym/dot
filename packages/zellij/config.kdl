@@ -100,7 +100,7 @@ keybinds clear-defaults=true {
     session {
         bind "d" { Detach; }
         bind "w" {
-            LaunchOrFocusPlugin "zellij:session-manager" {
+            LaunchOrFocusPlugin "session-manager" {
                 floating true
                 move_to_focused_tab true
             };
@@ -111,8 +111,10 @@ keybinds clear-defaults=true {
         bind "Ctrl g" { SwitchToMode "Locked"; }
         bind "Ctrl q" { Quit; }
         bind "Alt n" { NewPane; }
+        bind "Alt i" { MoveTab "Left"; }
+        bind "Alt o" { MoveTab "Right"; }
         bind "Alt s" {
-            LaunchOrFocusPlugin "zellij:session-manager" {
+            LaunchOrFocusPlugin "session-manager" {
                 floating true
                 move_to_focused_tab true
             };
@@ -134,11 +136,15 @@ keybinds clear-defaults=true {
         bind "Alt -" { Resize "Decrease"; }
 
         // Move panes
-        // @todo: Currently not working: Terminal/Zellij does not understand keys.
-        bind "Ctrl H" { MovePane "Left"; }
-        bind "Ctrl J" { MovePane "Down"; }
-        bind "Ctrl K" { MovePane "Up"; }
-        bind "Ctrl L" { MovePane "Right"; }
+        //
+        // TODO:
+        // Currently not working: Terminal/Zellij does not understand
+        // Ctrl+Shift+X keys.
+        //
+        //bind "Ctrl H" { MovePane "Left"; }
+        //bind "Ctrl J" { MovePane "Down"; }
+        //bind "Ctrl K" { MovePane "Up"; }
+        //bind "Ctrl L" { MovePane "Right"; }
 
         // Change pane layouts
         bind "Alt <" { PreviousSwapLayout; }
@@ -165,11 +171,17 @@ keybinds clear-defaults=true {
 }
 
 plugins {
-    tab-bar { path "tab-bar"; }
-    status-bar { path "status-bar"; }
-    strider { path "strider"; }
-    compact-bar { path "compact-bar"; }
-    session-manager { path "session-manager"; }
+    tab-bar location="zellij:tab-bar"
+    status-bar location="zellij:status-bar"
+    strider location="zellij:strider"
+    compact-bar location="zellij:compact-bar"
+    session-manager location="zellij:session-manager"
+    welcome-screen location="zellij:session-manager" {
+        welcome_screen true
+    }
+    filepicker location="zellij:strider" {
+        cwd "/"
+    }
 }
 
 // Choose what to do when zellij receives SIGTERM, SIGINT, SIGQUIT or SIGHUP
