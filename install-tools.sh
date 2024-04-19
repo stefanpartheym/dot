@@ -73,3 +73,7 @@ result
 info "Installing neovim (replacement for vim)"
 $PKG_INSTALL neovim
 result
+
+info "Installing glow (markdown viewer)"
+$PKG_INSTALL glow
+result
