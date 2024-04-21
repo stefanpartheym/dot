@@ -27,6 +27,7 @@ if type -f git &>/dev/null
     alias gb="git branch"
     alias gl="git log --format=oneline --decorate"
     alias gcm="git commit -m"
+    alias gd="git diff"
     function gdd --wraps='git difftool -d' --description 'alias gdd=git difftool -d'
         git difftool -d $argv &
     end
