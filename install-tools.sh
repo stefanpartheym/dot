@@ -55,17 +55,6 @@ info "Installing delta (git diff pager)"
 $PKG_INSTALL git-delta
 result
 
-# In server environments install tmux, in desktop environments install zellij.
-if [ "$DOT_ENVIRONMENT" == "server" ]; then
-  info "Installing tmux"
-  $PKG_INSTALL tmux
-  result
-else
-  info "Installing zellij"
-  $PKG_INSTALL zellij
-  result
-fi
-
 info "Installing yazi and dependencies (cli file manager)"
 $PKG_INSTALL yazi unarchiver ffmpegthumbnailer poppler
 result
@@ -77,3 +66,18 @@ result
 info "Installing glow (markdown viewer)"
 $PKG_INSTALL glow
 result
+
+# Conditionally install software in `server` and `desktop` environments.
+if [ "$DOT_ENVIRONMENT" == "server" ]; then
+  info "Installing tmux"
+  $PKG_INSTALL tmux
+  result
+else
+  info "Installing zellij"
+  $PKG_INSTALL zellij
+  result
+
+  info "Installing pass (password-store)"
+  $PKG_INSTALL pass pass-otp pass-ln browserpass browserpass-chromium
+  result
+fi
