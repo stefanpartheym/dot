@@ -20,6 +20,17 @@ is_directory() {
   test -d "$1"
 }
 
+is_zellij_active() {
+  test -n "$ZELLIJ"
+}
+
+zellij_switch_session() {
+  plugin_name="https://github.com/mostafaqanbaryan/zellij-switch/releases/download/v0.1.0/zellij-switch.wasm"
+  session_identifier="$1"
+
+  zellij pipe --plugin "$plugin_name" -- "$session_identifier"
+}
+
 prompt_sessions="sessions> "
 prompt_zoxide="zoxide> "
 prompt_find="find> "
@@ -42,13 +53,24 @@ result=$(
 
 # Check if an already existing zellij session was selected.
 if is_zellij_session "$result"; then
-  # Attach to existing session.
-  zellij attach "$result"
+  if is_zellij_active; then
+    # Attach to existing session from inside zellij.
+    zellij_switch_session "${result}::${result}"
+  else
+    # Attach to existing session from outside zellij.
+    zellij attach "$result"
+  fi
 elif is_directory "$result"; then
-  # Create new session based on the selected directory.
-  session_name=$(basename "$result")
-  pushd "$result" >/dev/null
-  zellij attach -c "$session_name"
+  session_directory="$result"
+  session_identifier=$(basename "$result")
+  if is_zellij_active; then
+    # Create new session based on the selected directory from inside zellij.
+    zellij_switch_session "${session_identifier}::${session_directory}"
+  else
+    # Create new session based on the selected directory from outside zellij.
+    pushd "$session_directory" >/dev/null
+    zellij attach -c "$session_identifier"
+  fi
 else
   exit 1
 fi
