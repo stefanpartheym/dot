@@ -1,0 +1,151 @@
+#!/usr/bin/env sh
+
+zig_version="0.13.0"
+project_name=$(basename `pwd`)
+
+# Diff file for `build.zig`, when using a simple exe only build.
+# The diff is generated using the `project_name` variable.
+zig_build_exe_diff=$(cat <<EOF
+3,5d2
+< // Although this function looks imperative, note that its job is to
+< // declaratively construct a build graph that will be executed by an external
+< // runner.
+7,16c4,7
+<     // Standard target options allows the person running \`zig build\` to choose
+<     // what target to build for. Here we do not override the defaults, which
+<     // means any target is allowed, and the default is native. Other options
+<     // for restricting supported target set are available.
+<     const target = b.standardTargetOptions(.{});
+< 
+<     // Standard optimization options allow the person running \`zig build\` to select
+<     // between Debug, ReleaseSafe, ReleaseFast, and ReleaseSmall. Here we do not
+<     // set a preferred release mode, allowing the user to decide how to optimize.
+<     const optimize = b.standardOptimizeOption(.{});
+---
+>     const options = .{
+>         .target = b.standardTargetOptions(.{}),
+>         .optimize = b.standardOptimizeOption(.{}),
+>     };
+18c9
+<     const lib = b.addStaticLibrary(.{
+---
+>     const exe = b.addExecutable(.{
+20,24c11,13
+<         // In this case the main source file is merely a path, however, in more
+<         // complicated build scripts, this could be a generated file.
+<         .root_source_file = b.path("src/root.zig"),
+<         .target = target,
+<         .optimize = optimize,
+---
+>         .root_source_file = b.path("src/main.zig"),
+>         .target = options.target,
+>         .optimize = options.optimize,
+25a15
+>     b.installArtifact(exe);
+27,30c17,18
+<     // This declares intent for the library to be installed into the standard
+<     // location when the user invokes the "install" step (the default step when
+<     // running \`zig build\`).
+<     b.installArtifact(lib);
+---
+>     // Dependencies
+>     // const foo_dep = b.dependency("foo", options);
+32,33c20,24
+<     const exe = b.addExecutable(.{
+<         .name = "${project_name}",
+---
+>     // Add dependencies to the executable.
+>     // exe.root_module.addImport("foo", foo_dep.module("foo"));
+> 
+>     // Declare executable tests.
+>     const exe_unit_tests = b.addTest(.{
+35,36c26,27
+<         .target = target,
+<         .optimize = optimize,
+---
+>         .target = options.target,
+>         .optimize = options.optimize,
+37a29
+>     const run_exe_unit_tests = b.addRunArtifact(exe_unit_tests);
+39,46c31
+<     // This declares intent for the executable to be installed into the
+<     // standard location when the user invokes the "install" step (the default
+<     // step when running \`zig build\`).
+<     b.installArtifact(exe);
+< 
+<     // This *creates* a Run step in the build graph, to be executed when another
+<     // step is evaluated that depends on it. The next line below will establish
+<     // such a dependency.
+---
+>     // Run executable.
+48,52d32
+< 
+<     // By making the run step depend on the install step, it will be run from the
+<     // installation directory rather than directly from within the cache directory.
+<     // This is not necessary, however, if the application depends on other installed
+<     // files, this ensures they will be present and in the expected location.
+54,56d33
+< 
+<     // This allows the user to pass arguments to the application in the build
+<     // command itself, like this: \`zig build run -- arg1 arg2 etc\`
+60,63d36
+< 
+<     // This creates a build step. It will be visible in the \`zig build --help\` menu,
+<     // and can be selected like this: \`zig build run\`
+<     // This will evaluate the \`run\` step rather than the default, which is "install".
+67,87c40
+<     // Creates a step for unit testing. This only builds the test executable
+<     // but does not run it.
+<     const lib_unit_tests = b.addTest(.{
+<         .root_source_file = b.path("src/root.zig"),
+<         .target = target,
+<         .optimize = optimize,
+<     });
+< 
+<     const run_lib_unit_tests = b.addRunArtifact(lib_unit_tests);
+< 
+<     const exe_unit_tests = b.addTest(.{
+<         .root_source_file = b.path("src/main.zig"),
+<         .target = target,
+<         .optimize = optimize,
+<     });
+< 
+<     const run_exe_unit_tests = b.addRunArtifact(exe_unit_tests);
+< 
+<     // Similar to creating the run step earlier, this exposes a \`test\` step to
+<     // the \`zig build --help\` menu, providing a way for the user to request
+<     // running the unit tests.
+---
+>     // Run tests.
+89d41
+<     test_step.dependOn(&run_lib_unit_tests.step);
+
+EOF
+)
+
+#-------------------------------------------------------------------------------
+
+echo "## zig init ##"
+
+# Initialize project.
+ziege set-version $zig_version
+zig init
+cat <<EOF > .gitignore
+# zig related
+/.zig-cache/
+/zig-out/
+
+# other
+/assets/_archive/
+EOF
+
+# Create initial commit.
+git init
+git add .
+git commit -m 'initial commit'
+
+# Modify `build.zig` if pure exe project is to be initialized.
+if [ "$1" == "exe" ]; then
+  # Patch `build.zig`.
+  echo -e "$zig_build_exe_diff" | patch build.zig
+fi
