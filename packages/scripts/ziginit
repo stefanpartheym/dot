@@ -168,7 +168,7 @@ zig_build_mod_diff=$(cat <<EOF
 >     // const foo_dep = b.dependency("foo", options);
 > 
 >     // Add dependencies to the module.
->     // mod.root_module.addImport("foo", foo_dep.module("foo"));
+>     // mod.addImport("foo", foo_dep.module("foo"));
 35,36c25,26
 <         .target = target,
 <         .optimize = optimize,
