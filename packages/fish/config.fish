@@ -22,7 +22,7 @@ set -gx EDITOR nvim
 #
 
 # Git
-if type -f git &>/dev/null
+if type -q git
     alias gs="git status"
     alias gb="git branch"
     alias gl="git log --format=oneline --decorate"
@@ -37,23 +37,23 @@ if type -f git &>/dev/null
 end
 
 # Docker
-if type -f docker-compose &>/dev/null
+if type -q docker-compose
     alias dc="docker-compose"
 end
 
 # Kubernetes
-if type -f kubectl &>/dev/null
+if type -q kubectl
     alias kc="kubectl"
 end
 
 # eza
-if type -f eza &>/dev/null
+if type -q eza
     alias ls="eza --icons"
     alias la="ls -la"
 end
 
 # Tmux
-if type -f tmux &>/dev/null
+if type -q tmux
     # Create or attach to the default session
     function td --description 'Open tmux default session'
         set -l session_name default
@@ -66,13 +66,13 @@ if type -f tmux &>/dev/null
 end
 
 # Zoxide
-if type -f zoxide &>/dev/null
+if type -q zoxide
     # Initialize zoxide without creating `z` and `zi` aliases.
     zoxide init fish --no-cmd | source
 end
 
 # Zellij
-if type -f zellij &>/dev/null
+if type -q zellij
     # Setup command to attach to defeault session.
     alias zd="zellij a -c default"
     # Setup function to launch a zellij session in the current working directory.
