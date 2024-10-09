@@ -25,7 +25,11 @@ set -gx EDITOR nvim
 if type -q git
     alias gs="git status"
     alias gb="git branch"
-    alias gl="git log --format=oneline --decorate"
+    if type -q fzf
+        alias gl="git log --oneline | fzf"
+    else
+        alias gl="git log --format=oneline --decorate"
+    end
     alias gcm="git commit -m"
     alias gd="git diff"
     function gdd --wraps='git difftool -d' --description 'alias gdd=git difftool -d'
@@ -50,6 +54,11 @@ end
 if type -q eza
     alias ls="eza --icons"
     alias la="ls -la"
+end
+
+# fzf
+if type -q fzf
+    fzf --fish | source
 end
 
 # Tmux
