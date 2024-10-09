@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+zig_home="$HOME/.zig"
+ziege_url="https://github.com/photex/ziege/releases/download/v0.3.0/ziege-linux-x86_64"
+
+echo "## getziege ##"
+echo "Installing ziege to zig home: $zig_home"
+
+mkdir -p $zig_home
+
+wget $ziege_url -O "$zig_home/ziege"
+chmod +x "$zig_home/ziege"
+ln -s "$zig_home/ziege" "$zig_home/zig"
+ln -s "$zig_home/ziege" "$zig_home/zls"
