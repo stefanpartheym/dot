@@ -11,7 +11,7 @@ set dotenv-load
 environment := env("DOT_ENVIRONMENT", "desktop")
 
 # Set default packages, that apply to all environments.
-default_packages := "fish git neovim.minimal"
+default_packages := "fish starship git neovim.minimal"
 # Set all available packages in given environment.
 all_packages := if environment == "desktop" {
   default_packages + " zellij kitty scripts"

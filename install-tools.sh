@@ -77,6 +77,10 @@ else
   $PKG_INSTALL zellij
   result
 
+  info "Installing starship prompt"
+  $PKG_INSTALL starship
+  result
+
   info "Installing pass (password-store)"
   $PKG_INSTALL pass pass-otp pass-ln browserpass browserpass-chromium
   result

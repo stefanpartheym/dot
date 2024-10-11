@@ -1,0 +1,13 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """$directory$character"""
+right_format = """$all"""
+add_newline = true
+
+[character]
+success_symbol = '[❯](bold purple)'
+error_symbol = '[❯](bold red)'
+
+[zig]
+symbol = '⚡️'
+detect_files = ['.zigversion']

@@ -11,8 +11,15 @@ end
 # Setup environment
 #
 
+# Setup starship prompt
+if type -q starship
+    starship init fish | source
+    enable_transience
+end
+
 # Disable fish greeting
 set fish_greeting
+
 # Configure environment variables
 fish_add_path $HOME/.local/bin
 set -gx EDITOR nvim
