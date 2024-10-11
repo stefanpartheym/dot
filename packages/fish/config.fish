@@ -83,8 +83,9 @@ end
 
 # Zoxide
 if type -q zoxide
-    # Initialize zoxide without creating `z` and `zi` aliases.
-    zoxide init fish --no-cmd | source
+    # Initialize zoxide.
+    # HINT: Use flag `--no-cmd` to init without creating `z` and `zi` aliases.
+    zoxide init fish | source
 end
 
 # Zellij
