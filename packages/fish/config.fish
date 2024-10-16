@@ -8,6 +8,13 @@ if not functions -q fisher
 end
 
 #
+# Setup keybindings
+#
+
+# <C-y> Accept completion with
+bind \cy accept-autosuggestion
+
+#
 # Setup environment
 #
 
