@@ -12,10 +12,11 @@ end
 #
 
 # Setup starship prompt
-if type -q starship
-    starship init fish | source
-    enable_transience
-end
+# NOTE: Starship prompt is being enabled in `custom.fish`.
+# if type -q starship
+#     starship init fish | source
+#     enable_transience
+# end
 
 # Disable fish greeting
 set fish_greeting
