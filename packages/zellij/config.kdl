@@ -113,11 +113,22 @@ keybinds clear-defaults=true {
         bind "Alt n" { NewPane; }
         bind "Alt i" { MoveTab "Left"; }
         bind "Alt o" { MoveTab "Right"; }
-        bind "Alt s" {
-            LaunchOrFocusPlugin "session-manager" {
+        // Switch to recent/last session
+        bind "Alt r" {
+            Run "zs" "last-session" {
                 floating true
                 move_to_focused_tab true
-            };
+                close_on_exit true
+            }
+            SwitchToMode "Normal"
+        }
+        // Session manager
+        bind "Alt s" {
+            Run "zs" {
+                floating true
+                move_to_focused_tab true
+                close_on_exit true
+            }
             SwitchToMode "Normal"
         }
 
