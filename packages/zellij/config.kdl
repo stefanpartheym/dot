@@ -99,11 +99,12 @@ keybinds clear-defaults=true {
     }
     session {
         bind "d" { Detach; }
-        bind "w" {
+        bind "s" {
             LaunchOrFocusPlugin "session-manager" {
                 floating true
                 move_to_focused_tab true
-            };
+                close_on_exit true
+            }
             SwitchToMode "Normal"
         }
     }
