@@ -19,11 +19,10 @@ bind \cy accept-autosuggestion
 #
 
 # Setup starship prompt
-# NOTE: Starship prompt is being enabled in `custom.fish`.
-# if type -q starship
-#     starship init fish | source
-#     enable_transience
-# end
+if type -q starship
+    starship init fish | source
+    enable_transience
+end
 
 # Disable fish greeting
 set fish_greeting
