@@ -152,6 +152,7 @@ cmd_run_session_manager() {
       # Attach to existing session from outside zellij.
       zellij attach "$result"
     fi
+  # If session does not exist yet, make sure we're dealing with a directory.
   elif test -d "$result"; then
     session_dir="$result"
     session_name=$(basename "$result")
