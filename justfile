@@ -14,7 +14,7 @@ environment := env("DOT_ENVIRONMENT", "desktop")
 default_packages := "fish starship git neovim.minimal"
 # Set all available packages in given environment.
 all_packages := if environment == "desktop" {
-  default_packages + " zellij kitty scripts"
+  default_packages + " zellij kitty ghostty scripts"
 } else {
   default_packages + " tmux"
 }
