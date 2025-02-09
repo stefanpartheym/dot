@@ -1,3 +1,6 @@
+> [!WARNING]
+> This repository is deprecated. Use [stefanpartheym/dotfiles](https://github.com/stefanpartheym/dotfiles) instead.
+
 # dot
 
 Personal dotfiles repository.
